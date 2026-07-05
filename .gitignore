@@ -47,7 +47,7 @@ system/data/*
 !system/data/.keep
 
 # User-facing folders
-incoming/
-exports/
-reports/
-generated/
+/incoming/
+/exports/
+/reports/
+/generated/
