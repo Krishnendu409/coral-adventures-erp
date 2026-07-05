@@ -37,7 +37,7 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
       ui_hint: 0,
       transparent: 0,
       annotations_visible: 0,
-      scrollwheel: 0,
+      scrollwheel: 1,
       max_framerate: 120,
       framerate: 120,
       preload: 1, // Preload to prevent jagged edges and pop-in
@@ -53,8 +53,14 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
             annotations.forEach((_, i) => api.hideAnnotation(i));
             
             let currentIndex = 0;
-            // Restrict camera to not show angle 14 and onwards
-            const maxIndex = Math.min(annotations.length - 1, 13);
+            // Restrict camera to not show angle 13 and onwards
+            const maxIndex = Math.min(annotations.length - 1, 11);
+            
+            // Snap immediately to the first camera angle
+            const firstAnn = annotations[0];
+            if (firstAnn && firstAnn.eye && firstAnn.target) {
+              api.setCameraLookAt(firstAnn.eye, firstAnn.target, 0);
+            }
             
             // @ts-ignore
             if (window.__sketchfabTimeout) clearTimeout(window.__sketchfabTimeout);
@@ -76,10 +82,11 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
               window.__sketchfabTimeout = setTimeout(flyToNext, 8500);
             };
             
-            // Give it 1 second to fully render before starting the tour
+            // Give it a brief moment before starting the tour (since we already snapped to 0)
+            currentIndex = 1; // Tour starts from the next angle
             setTimeout(() => {
               flyToNext();
-            }, 1000);
+            }, 5000); // Wait 5s on the first view before panning
           });
         });
       },
@@ -108,7 +115,7 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
         strategy="afterInteractive"
         onLoad={initViewer}
       />
-      <div className="absolute inset-0 z-0 bg-black pointer-events-none">
+      <div className="absolute inset-0 z-0 bg-black pointer-events-auto">
         <iframe
           ref={iframeRef}
           title="Sketchfab Background"
