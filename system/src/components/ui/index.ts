@@ -6,5 +6,5 @@ export * from "./empty-state";
 export * from "./callout";
 export * from "./input";
 export * from "./table";
-export * from "./sketchfab-background";
+
 export * from "./theme-toggle";
