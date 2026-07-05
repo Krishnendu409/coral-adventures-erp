@@ -1,7 +1,11 @@
 @echo off
 cd /d "%~dp0"
 
-where npm >nul 2>nul
+if exist "C:\Program Files\nodejs\npm.cmd" (
+    set "PATH=%PATH%;C:\Program Files\nodejs"
+)
+
+call npm -v >nul 2>nul
 if %errorlevel% neq 0 (
     echo Node.js is not installed. Downloading the Node.js installer...
     echo This may take a minute or two. Please wait...
@@ -11,10 +15,15 @@ if %errorlevel% neq 0 (
     start /wait node_installer.msi
     del node_installer.msi
     echo.
-    echo Node.js has been successfully installed!
-    echo IMPORTANT: You must CLOSE this window and double-click start.bat again to continue.
-    pause
-    exit /b 1
+    
+    if exist "C:\Program Files\nodejs\npm.cmd" (
+        set "PATH=%PATH%;C:\Program Files\nodejs"
+        echo Node.js has been successfully installed! Continuing...
+    ) else (
+        echo Node.js installation failed or was cancelled.
+        pause
+        exit /b 1
+    )
 )
 
 echo ========================================================
