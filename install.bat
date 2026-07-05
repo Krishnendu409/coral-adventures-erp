@@ -14,7 +14,7 @@ echo Building the application...
 call npm run build
 echo.
 echo ========================================================
-echo Build Complete!
+echo Installation Complete!
 echo You can now double-click start.bat to run the platform.
 echo ========================================================
 pause
