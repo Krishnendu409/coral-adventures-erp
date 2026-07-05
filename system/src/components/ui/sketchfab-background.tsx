@@ -53,7 +53,8 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
             annotations.forEach((_, i) => api.hideAnnotation(i));
             
             let currentIndex = 0;
-            const maxIndex = annotations.length - 1;
+            // Restrict camera to not show angle 14 and onwards
+            const maxIndex = Math.min(annotations.length - 1, 13);
             
             // @ts-ignore
             if (window.__sketchfabTimeout) clearTimeout(window.__sketchfabTimeout);
