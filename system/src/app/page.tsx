@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { LinkButton } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui";
+import { SketchfabBackground, ThemeToggle } from "@/components/ui";
 import * as motion from "framer-motion/client";
 
 export default function Home() {
@@ -10,7 +10,10 @@ export default function Home() {
         <ThemeToggle />
       </div>
       
-
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <SketchfabBackground modelId="cec2957661f34c15987ff3a782f92bb2" />
+      </div>
+      
       <main className="relative z-10 flex flex-1 flex-col justify-center p-8 md:p-16 lg:p-24 w-full max-w-[1600px] mx-auto pointer-events-none">
         <motion.div
           className="max-w-[480px] w-full flex flex-col items-start text-left bg-black/40 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10 pointer-events-auto shadow-2xl"

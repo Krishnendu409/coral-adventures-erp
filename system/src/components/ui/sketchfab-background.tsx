@@ -11,6 +11,13 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isInitialized = useRef(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [shouldMount, setShouldMount] = useState(false);
+
+  useEffect(() => {
+    // Delay mounting the heavy WebGL iframe until initial Framer Motion entrance animations finish
+    const t = setTimeout(() => setShouldMount(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   const initViewer = () => {
     // @ts-ignore
@@ -38,8 +45,8 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
       transparent: 0,
       annotations_visible: 0,
       scrollwheel: 0,
-      max_framerate: 120,
-      framerate: 120,
+      max_framerate: 60,
+      framerate: 60,
       preload: 1, // Preload to prevent jagged edges and pop-in
       success: (api: any) => {
         api.start();
@@ -92,14 +99,14 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
 
   useEffect(() => {
     // @ts-ignore
-    if (window.Sketchfab && iframeRef.current && !isInitialized.current) {
+    if (shouldMount && window.Sketchfab && iframeRef.current && !isInitialized.current) {
       initViewer();
     }
     return () => {
       // @ts-ignore
       if (window.__sketchfabTimeout) clearTimeout(window.__sketchfabTimeout);
     };
-  }, []);
+  }, [shouldMount]);
 
   return (
     <>
@@ -108,7 +115,10 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
         strategy="afterInteractive"
         onLoad={initViewer}
       />
-      <div className="absolute inset-0 z-0 bg-black pointer-events-none">
+      {shouldMount && (
+        <div 
+          className={`absolute inset-0 z-0 bg-black pointer-events-none transition-opacity duration-[2000ms] ease-out ${isLoaded ? "opacity-100" : "opacity-0"}`}
+        >
         <iframe
           ref={iframeRef}
           title="Sketchfab Background"
@@ -129,7 +139,8 @@ export function SketchfabBackground({ modelId }: SketchfabBackgroundProps) {
           web-share="true"
           className="w-full h-full scale-[1.1]"
         />
-      </div>
+        </div>
+      )}
     </>
   );
 }
