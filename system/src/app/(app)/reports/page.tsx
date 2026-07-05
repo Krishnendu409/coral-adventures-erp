@@ -1,7 +1,7 @@
-import { FileDown, CalendarRange } from "lucide-react";
+import { FileDown, CalendarRange, FileText, FileSpreadsheet, Download } from "lucide-react";
 import { getFinancialSummary } from "@/server/domain/analytics/financial";
 import { todayStr } from "@/server/domain/analytics/shared";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, LinkButton, Callout } from "@/components/ui";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, LinkButton } from "@/components/ui";
 import { formatInr } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ function isoDate(y: number, m: number, d: number): string {
 }
 
 function startOfIsoWeek(today: Date): Date {
-  const day = today.getUTCDay() || 7; // Monday = 1 ... Sunday = 7
+  const day = today.getUTCDay() || 7;
   const start = new Date(today);
   start.setUTCDate(start.getUTCDate() - (day - 1));
   return start;
@@ -31,14 +31,12 @@ function buildPresets(): Preset[] {
   const to = todayStr();
   const now = new Date(to + "T00:00:00Z");
   const y = now.getUTCFullYear();
-  const m = now.getUTCMonth(); // 0-indexed
+  const m = now.getUTCMonth(); 
 
   const weekStart = startOfIsoWeek(now);
   const quarterStartMonth = Math.floor(m / 3) * 3;
 
   return [
-    { label: "Today", from: to, to },
-    { label: "This Week", from: isoDate(weekStart.getUTCFullYear(), weekStart.getUTCMonth() + 1, weekStart.getUTCDate()), to },
     { label: "This Month", from: isoDate(y, m + 1, 1), to },
     { label: "This Quarter", from: isoDate(y, quarterStartMonth + 1, 1), to },
     { label: "This Year", from: isoDate(y, 1, 1), to },
@@ -49,48 +47,42 @@ export default function ReportsPage() {
   const presets = buildPresets();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Reports</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Company Reports</h1>
         <p className="mt-1 max-w-2xl text-[13px] text-foreground-muted">
-          Financial summary exports for standard reporting periods. Each is computed live from bookings, payments,
-          and expenses.
+          Generate company-grade executive summaries and financial reports. Reports include high-level KPIs, 
+          operational metrics, and detailed financial breakdowns.
         </p>
       </div>
 
-      <Callout tone="info" title="Scope of this pass">
-        Full PDF reports and the complete daily/weekly/monthly/quarterly/yearly reporting matrix (CLAUDE.md Phase 9)
-        are tracked as a backlog item. This page covers real, working CSV exports of the Financial Summary for each
-        period below.
-      </Callout>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {presets.map((preset) => {
           const summary = getFinancialSummary(undefined, { from: preset.from, to: preset.to });
-          const href = `/api/reports/financial-csv?from=${preset.from}&to=${preset.to}&label=${encodeURIComponent(preset.label)}`;
+          const baseHref = `/api/downloads/executive-report?startDate=${preset.from}&endDate=${preset.to}&label=${encodeURIComponent(preset.label)}`;
           return (
-            <Card key={preset.label}>
+            <Card key={preset.label} className="border-border hover:shadow-sm transition-shadow">
               <CardHeader>
                 <div>
-                  <CardTitle>{preset.label}</CardTitle>
+                  <CardTitle className="text-base">{preset.label} Executive Summary</CardTitle>
                   <CardDescription>
                     {preset.from} to {preset.to}
                   </CardDescription>
                 </div>
                 <CalendarRange size={18} className="text-foreground-faint" />
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-3 gap-2 text-center">
+              <CardContent className="space-y-5">
+                <div className="grid grid-cols-3 gap-2 text-center bg-surface/50 p-3 rounded-md">
                   <div>
-                    <p className="text-[11px] uppercase tracking-wide text-foreground-muted">Revenue</p>
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-foreground-muted">Revenue</p>
                     <p className="mt-1 text-sm font-semibold text-foreground">{formatInr(summary.revenue.totalInr)}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase tracking-wide text-foreground-muted">Expenses</p>
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-foreground-muted">Expenses</p>
                     <p className="mt-1 text-sm font-semibold text-foreground">{formatInr(summary.expenses.totalInr)}</p>
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase tracking-wide text-foreground-muted">Profit</p>
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-foreground-muted">Profit</p>
                     <p
                       className={`mt-1 text-sm font-semibold ${summary.profitInr < 0 ? "text-danger" : "text-success"}`}
                     >
@@ -98,9 +90,21 @@ export default function ReportsPage() {
                     </p>
                   </div>
                 </div>
-                <LinkButton href={href} variant="secondary" size="sm" className="w-full">
-                  <FileDown size={14} /> Download CSV
-                </LinkButton>
+                
+                <div className="space-y-2">
+                  <p className="text-[11px] font-medium uppercase tracking-wider text-foreground-muted text-center">Export Format</p>
+                  <div className="flex gap-2">
+                    <LinkButton href={`${baseHref}&format=pdf`} variant="outline" size="sm" className="flex-1 border-border/80 text-foreground-muted hover:text-foreground">
+                      <FileText size={14} className="mr-1.5" /> PDF
+                    </LinkButton>
+                    <LinkButton href={`${baseHref}&format=docx`} variant="outline" size="sm" className="flex-1 border-border/80 text-foreground-muted hover:text-foreground">
+                      <FileDown size={14} className="mr-1.5" /> DOCX
+                    </LinkButton>
+                    <LinkButton href={`${baseHref}&format=csv`} variant="outline" size="sm" className="flex-1 border-border/80 text-foreground-muted hover:text-foreground">
+                      <FileSpreadsheet size={14} className="mr-1.5" /> CSV
+                    </LinkButton>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           );

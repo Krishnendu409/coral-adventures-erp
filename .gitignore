@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -11,14 +11,14 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -43,19 +43,11 @@ next-env.d.ts
 # Local operational data
 /data/*
 !/data/.keep
-!/data/archive/.keep
-!/data/logs/.keep
-!/data/backups/.keep
-!/data/templates/.keep
-!/data/database/.keep
-!/data/configuration/.keep
+system/data/*
+!system/data/.keep
 
 # User-facing folders
-/incoming/*
-!/incoming/.keep
-/exports/*
-!/exports/.keep
-/reports/*
-!/reports/.keep
-/generated/*
-!/generated/.keep
+incoming/
+exports/
+reports/
+generated/

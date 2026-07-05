@@ -1,8 +1,8 @@
 import path from "node:path";
 
-// DATA_ROOT defaults to ./data relative to the webapp, but can be overridden by env vars
-export const BUSINESS_ROOT = process.cwd();
-export const DATA_ROOT = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(BUSINESS_ROOT, "data");
+// DATA_ROOT defaults to ./data relative to the system directory, but can be overridden by env vars
+export const BUSINESS_ROOT = path.resolve(process.cwd(), "..");
+export const DATA_ROOT = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(process.cwd(), "data");
 
 export const PATHS = {
   incoming: path.join(BUSINESS_ROOT, "incoming"),
@@ -19,4 +19,4 @@ export const PATHS = {
 
 export const DB_FILE = path.join(PATHS.database, "coral_adventures.sqlite3");
 
-export const DOCS_BUSINESS_DIR = path.join(BUSINESS_ROOT, "docs", "superpowers");
+export const DOCS_BUSINESS_DIR = path.join(process.cwd(), "src", "server", "db", "data");
