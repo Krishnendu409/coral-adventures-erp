@@ -44,8 +44,7 @@ const NAV_SECONDARY: NavItem[] = [
   { href: "/import", label: "Import Trips", icon: Upload },
   { href: "/downloads", label: "Downloads", icon: Download },
   { href: "/reports", label: "Reports", icon: FileText },
-  { href: "/assumptions", label: "Assumptions", icon: Settings },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/settings/assumptions", label: "Assumptions", icon: Settings }
 ];
 
 function NavLink({ item, active }: { item: NavItem; active: boolean }) {
