@@ -4,10 +4,12 @@ cd /d "%~dp0"
 echo Checking prerequisites...
 where npm >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Node.js is not installed. Downloading and installing Node.js automatically...
+    echo Node.js is not installed. Downloading the Node.js installer...
     echo This may take a minute or two. Please wait...
     powershell -Command "Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi' -OutFile 'node_installer.msi'"
-    msiexec /i node_installer.msi /quiet /norestart
+    echo.
+    echo Please complete the Node.js setup wizard that is about to open.
+    start /wait node_installer.msi
     del node_installer.msi
     echo.
     echo Node.js has been successfully installed!
