@@ -5,11 +5,11 @@ export const BUSINESS_ROOT = process.cwd();
 export const DATA_ROOT = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(BUSINESS_ROOT, "data");
 
 export const PATHS = {
-  incoming: path.join(DATA_ROOT, "incoming"),
-  generated: path.join(DATA_ROOT, "generated"),
+  incoming: path.join(BUSINESS_ROOT, "incoming"),
+  generated: path.join(BUSINESS_ROOT, "generated"),
   archive: path.join(DATA_ROOT, "archive"),
-  reports: path.join(DATA_ROOT, "reports"),
-  exports: path.join(DATA_ROOT, "exports"),
+  reports: path.join(BUSINESS_ROOT, "reports"),
+  exports: path.join(BUSINESS_ROOT, "exports"),
   logs: path.join(DATA_ROOT, "logs"),
   backups: path.join(DATA_ROOT, "backups"),
   templates: path.join(DATA_ROOT, "templates"),

@@ -43,13 +43,19 @@ next-env.d.ts
 # Local operational data
 /data/*
 !/data/.keep
-!/data/incoming/.keep
-!/data/generated/.keep
 !/data/archive/.keep
-!/data/reports/.keep
-!/data/exports/.keep
 !/data/logs/.keep
 !/data/backups/.keep
 !/data/templates/.keep
 !/data/database/.keep
 !/data/configuration/.keep
+
+# User-facing folders
+/incoming/*
+!/incoming/.keep
+/exports/*
+!/exports/.keep
+/reports/*
+!/reports/.keep
+/generated/*
+!/generated/.keep
