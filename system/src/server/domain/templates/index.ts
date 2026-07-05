@@ -36,15 +36,13 @@ export async function generateTripPackage(tripId: string): Promise<GeneratedTrip
   fs.mkdirSync(folderPath, { recursive: true });
 
   const files: string[] = [];
-  for (const type of WORKBOOK_ORDER) {
+  await Promise.all(WORKBOOK_ORDER.map(async (type) => {
     const spec = WORKBOOK_SPECS[type];
-    // eslint-disable-next-line no-await-in-loop
     const workbook = await buildWorkbook(db, spec, context);
     const filePath = path.join(folderPath, spec.fileName);
-    // eslint-disable-next-line no-await-in-loop
     await workbook.xlsx.writeFile(filePath);
     files.push(filePath);
-  }
+  }));
 
   return { tripId, folderPath, files };
 }
@@ -162,11 +160,9 @@ export async function generateTodaysTripPackage(): Promise<TodaysPackageResult> 
   });
   ensureTrip();
 
-  const trips: GeneratedTripPackage[] = [];
-  for (const tripId of tripIds) {
-    // eslint-disable-next-line no-await-in-loop
-    trips.push(await generateTripPackage(tripId));
-  }
+  const trips: GeneratedTripPackage[] = await Promise.all(
+    tripIds.map((tripId) => generateTripPackage(tripId))
+  );
 
   return { tripDate, trips };
 }

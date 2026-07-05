@@ -488,22 +488,21 @@ export async function importTripFolder(folderPath: string): Promise<ImportResult
 /** Imports every trip folder currently waiting in data/incoming/, one at a time — a failure in one never affects another. */
 export async function importAllIncoming(): Promise<ImportResult[]> {
   const candidates = scanIncoming();
-  const results: ImportResult[] = [];
-  for (const candidate of candidates) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const result = await importTripFolder(candidate.folderPath);
-      results.push(result);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      results.push({
-        tripId: candidate.tripId,
-        folderPath: candidate.folderPath,
-        batchId: "",
-        status: "failed",
-        issues: [{ fileName: candidate.tripId, errorType: "unexpected_error", errorMessage: message, severity: "error" }],
-      });
-    }
-  }
+  const results: ImportResult[] = await Promise.all(
+    candidates.map(async (candidate) => {
+      try {
+        return await importTripFolder(candidate.folderPath);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        return {
+          tripId: candidate.tripId,
+          folderPath: candidate.folderPath,
+          batchId: "",
+          status: "failed",
+          issues: [{ fileName: candidate.tripId, errorType: "unexpected_error", errorMessage: message, severity: "error" }],
+        };
+      }
+    })
+  );
   return results;
 }
