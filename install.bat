@@ -35,7 +35,7 @@ call npm install
 echo.
 echo Setting up the database...
 call npm run db:migrate
-call npm run db:seed:synthetic
+call npm run db:seed
 echo.
 echo Building the application...
 call npm run build

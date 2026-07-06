@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type Database from "better-sqlite3";
+type Database = any;
 import { PATHS } from "../../config/paths";
 import { MANDATORY_WORKBOOKS, WORKBOOK_SPECS, type TemplateType } from "../templates/sheetSpecs";
 import { toDateOnlyString, todayDateOnlyString } from "../shared/excelDate";
@@ -121,7 +121,7 @@ function flagBookingRefs(
 }
 
 /** Full validation of one trip folder: file presence, per-cell type/enum/lookup checks, chronology, and cross-sheet references. */
-export async function validateTripFolderRich(folderPath: string, db: Database.Database): Promise<RichValidationResult> {
+export async function validateTripFolderRich(folderPath: string, db: Database): Promise<RichValidationResult> {
   const tripId = path.basename(folderPath);
   const issues: ValidationIssue[] = [];
   const todayIso = todayDateOnlyString();
@@ -302,7 +302,7 @@ export async function validateTripFolderRich(folderPath: string, db: Database.Da
 }
 
 /** Public, thinner validation entry point (per spec signature) — discards the parsed payload, keeping only the pass/fail report. */
-export async function validateTripFolder(folderPath: string, db: Database.Database): Promise<ValidationResult> {
+export async function validateTripFolder(folderPath: string, db: Database): Promise<ValidationResult> {
   const rich = await validateTripFolderRich(folderPath, db);
   return { tripId: rich.tripId, folderPath: rich.folderPath, ok: rich.ok, issues: rich.issues };
 }

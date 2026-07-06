@@ -9,7 +9,6 @@
     "lint": "eslint",
     "db:migrate": "tsx src/server/db/migrate.ts",
     "db:seed": "tsx src/server/db/seed.ts",
-    "db:seed:synthetic": "tsx src/server/db/synthetic-seed.ts",
     "test": "vitest"
   },
   "dependencies": {
@@ -18,7 +17,7 @@
     "@react-three/fiber": "^9.6.1",
     "@sketchfab/viewer-api": "^1.12.1",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "^11.10.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "docx": "^9.7.1",

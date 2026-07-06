@@ -24,7 +24,7 @@ export function migrate(): void {
     db
       .prepare("SELECT filename FROM schema_migrations")
       .all()
-      .map((row) => (row as { filename: string }).filename)
+      .map((row: any) => (row as { filename: string }).filename)
   );
 
   const files = fs

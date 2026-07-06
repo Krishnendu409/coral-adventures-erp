@@ -1,4 +1,4 @@
-import type Database from "better-sqlite3";
+type Database = any;
 import type { LookupTable } from "./sheetSpecs";
 
 export interface TripContext {
@@ -38,7 +38,7 @@ interface TripContextRow {
 }
 
 /** Loads the live trip context (vessel/route/cruise type/captain) for a given trip_id. Throws if the trip doesn't exist. */
-export function loadTripContext(db: Database.Database, tripId: string): TripContext {
+export function loadTripContext(db: Database, tripId: string): TripContext {
   const row = db
     .prepare(
       `SELECT
@@ -86,7 +86,7 @@ const LOOKUP_QUERIES: Record<LookupTable, string> = {
 };
 
 /** Live list of names for a dynamic dropdown (marketing channels, cruise types, inventory items). May be empty on a freshly-seeded DB. */
-export function getLookupNames(db: Database.Database, table: LookupTable): string[] {
+export function getLookupNames(db: Database, table: LookupTable): string[] {
   return (db.prepare(LOOKUP_QUERIES[table]).all() as Array<{ name: string }>).map((r) => r.name);
 }
 
@@ -97,7 +97,7 @@ const LOOKUP_ID_COLUMN: Record<LookupTable, string> = {
 };
 
 /** Resolves a lookup column's free-text value to its DB id by case-insensitive name match. Returns null if not found. */
-export function resolveLookupId(db: Database.Database, table: LookupTable, name: string): string | null {
+export function resolveLookupId(db: Database, table: LookupTable, name: string): string | null {
   const idColumn = LOOKUP_ID_COLUMN[table];
   const row = db
     .prepare(`SELECT ${idColumn} AS id FROM ${table} WHERE lower(name) = lower(?)`)

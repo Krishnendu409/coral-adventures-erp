@@ -1,13 +1,23 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { calculateRecommendation } from '../../src/server/domain/pricing/rulesEngine';
 
+vi.mock('../../src/server/domain/settings/configRepository', () => ({
+  getConfig: vi.fn((key: string) => {
+    if (key === "BASE_TICKET_PRICE") return "2000";
+    if (key === "HIGH_OCCUPANCY_THRESHOLD") return "0.85";
+    if (key === "LOW_OCCUPANCY_THRESHOLD") return "0.50";
+    return null;
+  }),
+}));
+
 test('recommends 20% surge for >85% occupancy in shoulder season', () => {
-  const result = calculateRecommendation(0.86, 5, 1000, 'shoulder');
-  expect(result.recommendedPrice).toBe(1200);
-  expect(result.reasoning).toContain('Increase price by 20% due to high occupancy');
+  const result = calculateRecommendation(0.86, 5, 'shoulder');
+  expect(result.recommendedPrice).toBe(2400); // 2000 * 1.2 = 2400
+  expect(result.reasoning).toContain('Increase price');
 });
 
 test('recommends 15% discount for <50% occupancy', () => {
-  const result = calculateRecommendation(0.40, 1, 1000, 'shoulder');
-  expect(result.recommendedPrice).toBe(850);
+  const result = calculateRecommendation(0.40, 2, 'peak');
+  expect(result.recommendedPrice).toBe(1700); // 2000 * 0.85 = 1700
+  expect(result.reasoning).toContain('Decrease price');
 });

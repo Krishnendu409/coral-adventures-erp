@@ -74,7 +74,10 @@ function seedBusinessParameters(db: ReturnType<typeof getDb>): void {
       erp_field = excluded.erp_field, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
   `);
 
-  for (const row of assumptions) upsert.run(row);
+  for (const row of assumptions) {
+    const { id, parameter, value, unit, min, max, source, confidence, category, notes, erp_field } = row as any;
+    upsert.run({ id, parameter, value, unit, min, max, source, confidence, category, notes, erp_field });
+  }
   console.log(`[seed] business_parameters: ${assumptions.length} rows`);
 }
 
@@ -109,7 +112,17 @@ function seedMarketingChannels(db: ReturnType<typeof getDb>): void {
 
   for (const row of channels) {
     const num = row.id.replace(/^C/, "").padStart(3, "0");
-    upsert.run({ ...row, channel_id: `CA-CHN-${num}` });
+    const { category, name, description, target_audience, market_size_inr,
+      reachable_persons_year, reach_pct, peak_months, seasonality_index, active_months,
+      capture_rate, lead_rate, conversion_rate, repeat_rate, referral_rate, avg_group_size,
+      annual_mktg_spend_inr, risk_level, data_confidence, priority, scalability, rollout_phase, recommendation } = row as any;
+    
+    upsert.run({
+      channel_id: `CA-CHN-${num}`, category, name, description, target_audience, market_size_inr,
+      reachable_persons_year, reach_pct, peak_months, seasonality_index, active_months,
+      capture_rate, lead_rate, conversion_rate, repeat_rate, referral_rate, avg_group_size,
+      annual_mktg_spend_inr, risk_level, data_confidence, priority, scalability, rollout_phase, recommendation
+    });
   }
   console.log(`[seed] marketing_channels: ${channels.length} rows`);
 }

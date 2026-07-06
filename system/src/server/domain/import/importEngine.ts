@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import type Database from "better-sqlite3";
+type Database = any;
 import { getDb } from "../../db/client";
 import { PATHS } from "../../config/paths";
 import { ID_PREFIX, nextId } from "../ids";
@@ -23,7 +23,7 @@ function computeSha256(filePath: string): string {
   return crypto.createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
 }
 
-function insertIssues(db: Database.Database, batchId: string, issues: ValidationIssue[]): void {
+function insertIssues(db: Database, batchId: string, issues: ValidationIssue[]): void {
   if (issues.length === 0) return;
   const stmt = db.prepare(
     `INSERT INTO import_errors (batch_id, file_name, sheet_name, cell_reference, error_type, error_message, severity)
@@ -44,7 +44,7 @@ function insertIssues(db: Database.Database, batchId: string, issues: Validation
  * everything written so far automatically.
  */
 function commitEntities(
-  db: Database.Database,
+  db: Database,
   batchId: string,
   trip: CommitTrip,
   parsed: Partial<Record<TemplateType, ParsedWorkbook>>
