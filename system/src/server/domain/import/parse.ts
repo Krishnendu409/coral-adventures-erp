@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import type Database from "better-sqlite3";
+type Database = any;
 import type { ColumnSpec, SheetSpec, WorkbookSpec } from "../templates/sheetSpecs";
 import { resolveLookupId } from "../templates/tripContext";
 import type { ValidationIssue } from "./types";
@@ -102,7 +102,7 @@ export async function parseWorkbookFile(
   filePath: string,
   fileName: string,
   spec: WorkbookSpec,
-  db: Database.Database,
+  db: Database,
   issues: ValidationIssue[]
 ): Promise<ParsedWorkbook | null> {
   const workbook = new ExcelJS.Workbook();

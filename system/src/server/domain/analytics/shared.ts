@@ -1,4 +1,4 @@
-import type Database from "better-sqlite3";
+type Database = any;
 import { getDb } from "../../db/client";
 
 /**
@@ -12,7 +12,7 @@ import { getDb } from "../../db/client";
  * derived here.
  */
 
-export type Db = Database.Database;
+export type Db = any;
 
 export function db(passed?: Db): Db {
   return passed ?? getDb();

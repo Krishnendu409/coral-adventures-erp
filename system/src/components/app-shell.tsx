@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ChatWidget } from "@/components/ai/ChatWidget";
 
 interface NavItem {
   href: string;
@@ -37,6 +38,7 @@ const NAV: NavItem[] = [
   { href: "/dashboard/maintenance", label: "Maintenance", icon: Wrench },
   { href: "/dashboard/inventory", label: "Inventory", icon: Boxes },
   { href: "/dashboard/forecasting", label: "Forecasting", icon: TrendingUp },
+  { href: "/dashboard/pricing", label: "Pricing AI", icon: LineChart },
   { href: "/dashboard/expansion", label: "Expansion", icon: Compass },
 ];
 
@@ -70,6 +72,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-[100dvh] w-full overflow-hidden p-3 md:p-4 gap-4 shader-mesh-bg">
+      <ChatWidget />
       <aside className="hidden w-64 shrink-0 flex-col md:flex py-4 relative z-10 bg-gradient-to-b from-ocean-800 to-ocean-900 border border-black/20 rounded-[2rem] shadow-2xl overflow-hidden">
         <div className="flex items-center gap-3 px-6 py-4 mb-4 relative z-10">
           <Image src="/brand/logo-256.png" alt="Coral Adventures" width={32} height={32} className="rounded-xl shadow-sm" priority />

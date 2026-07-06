@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import type Database from "better-sqlite3";
+type Database = any;
 import type { ColumnSpec, SheetSpec, WorkbookSpec } from "./sheetSpecs";
 import type { TripContext } from "./tripContext";
 import { getLookupNames } from "./tripContext";
@@ -123,7 +123,7 @@ function addTripInfoSheet(workbook: ExcelJS.Workbook, spec: WorkbookSpec, contex
 /** Adds one data-entry sheet: locked header row + a block of unlocked input rows, with dropdowns for enum/lookup columns. */
 function addDataSheet(
   workbook: ExcelJS.Workbook,
-  db: Database.Database,
+  db: Database,
   sheetSpec: SheetSpec,
   listRegistry: ListRegistry
 ): ExcelJS.Worksheet {
@@ -200,7 +200,7 @@ function addDataSheet(
 
 /** Builds the full workbook for a given type. `context` is null for a blank/example download (no trip assigned). */
 export async function buildWorkbook(
-  db: Database.Database,
+  db: Database,
   spec: WorkbookSpec,
   context: TripContext | null
 ): Promise<ExcelJS.Workbook> {
