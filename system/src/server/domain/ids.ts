@@ -1,4 +1,4 @@
-import type Database from "better-sqlite3";
+type Database = any;
 
 // Entity prefixes for the CA-XXX-YYYY-NNNNNN (yearly) / CA-XXX-NNNNNN
 // (permanent) ID scheme. One id_sequences row per sequence key.
@@ -39,7 +39,7 @@ interface NextIdOptions {
  * id_sequences. Must be called from inside the same db.transaction() as the
  * row insert it names, so a rolled-back import never burns/reuses an ID.
  */
-export function nextId(db: Database.Database, prefix: IdPrefix, options: NextIdOptions = {}): string {
+export function nextId(db: Database, prefix: IdPrefix, options: NextIdOptions = {}): string {
   const { yearly = false, year, padLength = 6 } = options;
   if (yearly && !year) {
     throw new Error(`nextId: year is required for yearly sequence '${prefix}'`);

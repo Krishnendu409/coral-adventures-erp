@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type Database from "better-sqlite3";
+type Database = any;
 import { getDb } from "../../db/client";
 import { PATHS } from "../../config/paths";
 import { ID_PREFIX, nextId } from "../ids";
@@ -36,13 +36,30 @@ export async function generateTripPackage(tripId: string): Promise<GeneratedTrip
   fs.mkdirSync(folderPath, { recursive: true });
 
   const files: string[] = [];
-  await Promise.all(WORKBOOK_ORDER.map(async (type) => {
+  
+  // Check if all files already exist and have content. If so, skip generation.
+  const allExist = WORKBOOK_ORDER.every(type => {
+    const spec = WORKBOOK_SPECS[type];
+    const fp = path.join(folderPath, spec.fileName);
+    return fs.existsSync(fp) && fs.statSync(fp).size > 0;
+  });
+
+  if (allExist) {
+    WORKBOOK_ORDER.forEach(type => {
+      files.push(path.join(folderPath, WORKBOOK_SPECS[type].fileName));
+    });
+    return { tripId, folderPath, files };
+  }
+
+  for (const type of WORKBOOK_ORDER) {
     const spec = WORKBOOK_SPECS[type];
     const workbook = await buildWorkbook(db, spec, context);
     const filePath = path.join(folderPath, spec.fileName);
     await workbook.xlsx.writeFile(filePath);
     files.push(filePath);
-  }));
+    // Yield to the event loop so the server remains responsive during heavy generation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
 
   return { tripId, folderPath, files };
 }
@@ -78,7 +95,7 @@ function pickCruiseTypeId(
   return cruiseTypes[slotIndex % cruiseTypes.length].cruise_type_id;
 }
 
-function getBusinessParameter(db: Database.Database, erpField: string, fallback: number): number {
+function getBusinessParameter(db: Database, erpField: string, fallback: number): number {
   const row = db.prepare("SELECT value FROM business_parameters WHERE erp_field = ?").get(erpField) as
     | { value: number | null }
     | undefined;
@@ -160,9 +177,10 @@ export async function generateTodaysTripPackage(): Promise<TodaysPackageResult> 
   });
   ensureTrip();
 
-  const trips: GeneratedTripPackage[] = await Promise.all(
-    tripIds.map((tripId) => generateTripPackage(tripId))
-  );
+  const trips: GeneratedTripPackage[] = [];
+  for (const tripId of tripIds) {
+    trips.push(await generateTripPackage(tripId));
+  }
 
   return { tripDate, trips };
 }

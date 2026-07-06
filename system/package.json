@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:migrate": "tsx src/server/db/migrate.ts",
     "db:seed": "tsx src/server/db/seed.ts",
-    "db:seed:synthetic": "tsx src/server/db/synthetic-seed.ts"
+    "test": "vitest"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
@@ -17,7 +17,7 @@
     "@react-three/fiber": "^9.6.1",
     "@sketchfab/viewer-api": "^1.12.1",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "^11.10.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "docx": "^9.7.1",
@@ -39,10 +39,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/ui": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }
