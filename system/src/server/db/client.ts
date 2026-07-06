@@ -18,8 +18,14 @@ class BetterSqlite3Polyfill {
     const stmt = this.db.prepare(sql);
     return {
       run: (...args: any[]) => stmt.run(...args),
-      get: (...args: any[]) => stmt.get(...args),
-      all: (...args: any[]) => stmt.all(...args),
+      get: (...args: any[]) => {
+        const res = stmt.get(...args);
+        return res ? { ...res } : res;
+      },
+      all: (...args: any[]) => {
+        const res = stmt.all(...args);
+        return Array.isArray(res) ? res.map((row: any) => ({ ...row })) : res;
+      },
     };
   }
   
