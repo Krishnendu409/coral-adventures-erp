@@ -20,11 +20,11 @@ class BetterSqlite3Polyfill {
       run: (...args: any[]) => stmt.run(...args),
       get: (...args: any[]) => {
         const res = stmt.get(...args);
-        return res ? { ...res } : res;
+        return res ? JSON.parse(JSON.stringify(res)) : res;
       },
       all: (...args: any[]) => {
         const res = stmt.all(...args);
-        return Array.isArray(res) ? res.map((row: any) => ({ ...row })) : res;
+        return res ? JSON.parse(JSON.stringify(res)) : res;
       },
     };
   }

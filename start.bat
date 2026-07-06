@@ -1,37 +1,44 @@
 @echo off
 cd /d "%~dp0"
+setlocal enabledelayedexpansion
 
+echo.
+echo  ============================================================
+echo   CORAL ADVENTURES - BI Platform
+echo  ============================================================
+echo.
+
+:: Ensure Node.js is in PATH
 if exist "C:\Program Files\nodejs\npm.cmd" (
     set "PATH=%PATH%;C:\Program Files\nodejs"
 )
 
 call npm -v >nul 2>nul
 if %errorlevel% neq 0 (
-    echo Node.js is not installed. Downloading the Node.js installer...
-    echo This may take a minute or two. Please wait...
-    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi' -OutFile 'node_installer.msi'"
-    echo.
-    echo Please complete the Node.js setup wizard that is about to open.
-    start /wait msiexec /i node_installer.msi
-    del node_installer.msi
-    echo.
-    
-    if exist "C:\Program Files\nodejs\npm.cmd" (
-        set "PATH=%PATH%;C:\Program Files\nodejs"
-        echo Node.js has been successfully installed! Continuing...
-    ) else (
-        echo Node.js installation failed or was cancelled.
-        pause
-        exit /b 1
-    )
+    echo [ERROR] Node.js not found. Please run install.bat first.
+    pause
+    exit /b 1
 )
 
-echo ========================================================
-echo Starting Coral Adventures BI Platform...
-echo Please wait while the local server spins up.
-echo The application will be available at http://localhost:3000
-echo ========================================================
+:: Check if the application has been built
+if not exist "system\.next" (
+    echo [WARN] Application not yet built. Running install first...
+    echo.
+    call install.bat
+)
+
+echo  Starting the platform. Please wait...
+echo.
+echo  The dashboard will be available at:
+echo    http://localhost:3000
+echo.
+echo  Press CTRL+C to stop the server.
 echo.
 cd system
 call npm start
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] Server failed to start. Trying dev mode...
+    call npm run dev
+)
 pause
