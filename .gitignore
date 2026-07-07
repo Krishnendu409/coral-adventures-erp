@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — .env.example is safe to commit (no secrets), .env.local is NOT
 .env*
 !.env.example
 !system/.env.example
@@ -44,14 +44,33 @@ system/.env.local
 *.tsbuildinfo
 next-env.d.ts
 
-# Local operational data
+# SQLite databases (runtime data, not source code)
+*.db
+*.sqlite
+*.sqlite3
+system/coral.db
+
+# Local operational data — keep folder structure, ignore runtime files
 /data/*
 !/data/.keep
 system/data/*
 !system/data/.keep
+!system/data/archive/.keep
+!system/data/backups/.keep
+!system/data/configuration/.keep
+!system/data/database/.keep
+!system/data/logs/.keep
+!system/data/templates/.keep
+system/src/server/db/data/*.db
 
-# User-facing folders
+# User-facing trip data folders — created at runtime, not source code
 /incoming/
 /exports/
 /reports/
 /generated/
+
+# Scratch / test files
+test-perf.ts
+test.pdf
+system/test-action.ts
+system/test-db.ts
