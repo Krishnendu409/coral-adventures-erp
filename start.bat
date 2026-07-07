@@ -10,7 +10,7 @@ echo.
 
 :: Ensure Node.js v22+ is in PATH and used
 if exist "C:\Program Files\nodejs\npm.cmd" (
-    set "PATH=%PATH%;C:\Program Files\nodejs"
+    set "PATH=C:\Program Files\nodejs;%PATH%"
 )
 
 node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
@@ -49,6 +49,6 @@ if %errorlevel% neq 0 (
         echo.
         echo [ERROR] Development server also failed. 
         echo [ERROR] The port 3000 might be in use by another application.
-        timeout /t 10
+        pause
     )
 )

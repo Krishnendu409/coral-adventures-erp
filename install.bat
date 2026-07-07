@@ -12,7 +12,7 @@ echo.
 :: Step 1: Ensure Node.js v22+ is available
 :: ---------------------------------------------------------------
 if exist "C:\Program Files\nodejs\npm.cmd" (
-    set "PATH=%PATH%;C:\Program Files\nodejs"
+    set "PATH=C:\Program Files\nodejs;%PATH%"
 )
 
 :: Check if Node is installed AND version is >= 22
@@ -22,10 +22,10 @@ if %errorlevel% neq 0 (
     echo       This may take a few minutes. Please wait.
     powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi' -OutFile 'node_installer.msi' -UseBasicParsing"
     echo.
-    echo       Please complete the Node.js setup wizard that opens.
-    start /wait msiexec /i node_installer.msi /quiet /norestart
+    echo       Please click "Yes" if Windows asks for administrator permission.
+    start /wait msiexec /i node_installer.msi /passive /norestart
     del node_installer.msi 2>nul
-    set "PATH=%PATH%;C:\Program Files\nodejs"
+    set "PATH=C:\Program Files\nodejs;%PATH%"
     
     :: Verify installation
     node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
