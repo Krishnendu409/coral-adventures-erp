@@ -118,4 +118,4 @@ echo   To start the platform, double-click: start.bat
 echo   Dashboard: http://localhost:3000
 echo  ============================================================
 echo.
-pause
+timeout /t 10
