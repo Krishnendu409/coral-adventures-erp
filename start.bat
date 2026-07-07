@@ -8,17 +8,17 @@ echo   CORAL ADVENTURES - BI Platform
 echo  ============================================================
 echo.
 
-:: Ensure Node.js v22+ is in PATH and used
-if exist "C:\Program Files\nodejs\npm.cmd" (
-    set "PATH=C:\Program Files\nodejs;%PATH%"
-)
-
-node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
-if %errorlevel% neq 0 (
-    echo [ERROR] Node.js v22+ not found or outdated. Please run install.bat first to upgrade.
+:: ---------------------------------------------------------------
+:: Step 1: Ensure local portable Node.js v22+ is available
+:: ---------------------------------------------------------------
+if not exist "bin\node\node.exe" (
+    echo [ERROR] Portable Node.js not found. Please run install.bat first.
     pause
     exit /b 1
 )
+
+:: Set PATH to use our local portable node
+set "PATH=%CD%\bin\node;%PATH%"
 
 :: Check if the application has been built
 if not exist "system\.next" (
@@ -37,16 +37,16 @@ echo.
 cd system
 
 echo  Checking if server is already running...
-:: We will just use npm run dev as fallback if start fails, but timeout instead of pause
+:: We will just use npm run dev as fallback if start fails
 call npm start
 if %errorlevel% neq 0 (
-    echo.
+    echo:
     echo [WARN] Production server failed to start (port may be in use, or build missing).
     echo [INFO] Falling back to development mode...
-    echo.
+    echo:
     call npm run dev
     if !errorlevel! neq 0 (
-        echo.
+        echo:
         echo [ERROR] Development server also failed. 
         echo [ERROR] The port 3000 might be in use by another application.
         pause
