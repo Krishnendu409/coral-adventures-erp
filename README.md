@@ -30,7 +30,7 @@ Everything you interact with daily lives in the root folder:
 ### Step 1 — Install
 
 Double-click **`install.bat`** and wait. It will:
-1. Install Node.js (if not already installed)
+1. Install Node.js v22 (if not already installed or if outdated)
 2. Install all dependencies
 3. Create and migrate the database
 4. Set up your environment configuration

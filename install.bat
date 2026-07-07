@@ -9,31 +9,34 @@ echo  ============================================================
 echo.
 
 :: ---------------------------------------------------------------
-:: Step 1: Ensure Node.js is available
+:: Step 1: Ensure Node.js v22+ is available
 :: ---------------------------------------------------------------
 if exist "C:\Program Files\nodejs\npm.cmd" (
     set "PATH=%PATH%;C:\Program Files\nodejs"
 )
 
-call npm -v >nul 2>nul
+:: Check if Node is installed AND version is >= 22
+node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [1/5] Node.js not found. Downloading Node.js v20...
+    echo [1/5] Node.js v22+ not found or outdated. Downloading Node.js v22.14.0 LTS...
     echo       This may take a few minutes. Please wait.
-    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi' -OutFile 'node_installer.msi' -UseBasicParsing"
+    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://nodejs.org/dist/v22.14.0/node-v22.14.0-x64.msi' -OutFile 'node_installer.msi' -UseBasicParsing"
     echo.
     echo       Please complete the Node.js setup wizard that opens.
     start /wait msiexec /i node_installer.msi /quiet /norestart
     del node_installer.msi 2>nul
     set "PATH=%PATH%;C:\Program Files\nodejs"
-    call npm -v >nul 2>nul
+    
+    :: Verify installation
+    node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
     if !errorlevel! neq 0 (
-        echo [ERROR] Node.js installation failed. Please install Node.js manually from https://nodejs.org
+        echo [ERROR] Node.js v22 installation failed. Please install Node.js 22 manually from https://nodejs.org
         pause
         exit /b 1
     )
-    echo [1/5] Node.js installed successfully!
+    echo [1/5] Node.js v22+ installed successfully!
 ) else (
-    echo [1/5] Node.js found. OK
+    echo [1/5] Node.js v22+ found. OK
 )
 
 :: ---------------------------------------------------------------

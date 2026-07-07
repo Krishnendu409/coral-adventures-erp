@@ -8,14 +8,14 @@ echo   CORAL ADVENTURES - BI Platform
 echo  ============================================================
 echo.
 
-:: Ensure Node.js is in PATH
+:: Ensure Node.js v22+ is in PATH and used
 if exist "C:\Program Files\nodejs\npm.cmd" (
     set "PATH=%PATH%;C:\Program Files\nodejs"
 )
 
-call npm -v >nul 2>nul
+node -e "if(parseInt(process.versions.node.split('.')[0]) < 22) process.exit(1)" >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [ERROR] Node.js not found. Please run install.bat first.
+    echo [ERROR] Node.js v22+ not found or outdated. Please run install.bat first to upgrade.
     pause
     exit /b 1
 )
