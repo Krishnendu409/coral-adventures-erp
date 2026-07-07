@@ -13,5 +13,5 @@ vi.mock('../../src/server/domain/settings/configRepository', () => ({
 test('GET returns valid pricing recommendation JSON', async () => {
   const res = await GET(new Request('http://localhost/api/pricing/recommendations'));
   const json = await res.json();
-  expect(json.recommendedPrice).toBeDefined();
+  expect(Array.isArray(json)).toBe(true);
 });

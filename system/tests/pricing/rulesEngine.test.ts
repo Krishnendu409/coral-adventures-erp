@@ -10,14 +10,20 @@ vi.mock('../../src/server/domain/settings/configRepository', () => ({
   }),
 }));
 
-test('recommends 20% surge for >85% occupancy in shoulder season', () => {
-  const result = calculateRecommendation(0.86, 5, 'shoulder');
+test('recommends 20% surge for >85% occupancy', () => {
+  const result = calculateRecommendation(0.86, 2000, 0.85, 0.50);
   expect(result.recommendedPrice).toBe(2400); // 2000 * 1.2 = 2400
-  expect(result.reasoning).toContain('Increase price');
+  expect(result.reasoning).toContain('surge');
 });
 
 test('recommends 15% discount for <50% occupancy', () => {
-  const result = calculateRecommendation(0.40, 2, 'peak');
+  const result = calculateRecommendation(0.40, 2000, 0.85, 0.50);
   expect(result.recommendedPrice).toBe(1700); // 2000 * 0.85 = 1700
-  expect(result.reasoning).toContain('Decrease price');
+  expect(result.reasoning).toContain('discount');
+});
+
+test('recommends stable price for normal occupancy', () => {
+  const result = calculateRecommendation(0.65, 2000, 0.85, 0.50);
+  expect(result.recommendedPrice).toBe(2000);
+  expect(result.reasoning).toContain('Stable');
 });

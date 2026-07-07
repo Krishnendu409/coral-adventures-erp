@@ -9,6 +9,33 @@ export interface PricingRecommendation {
   trend: 'surge' | 'discount' | 'stable';
 }
 
+export function calculateRecommendation(
+  occupancy: number, 
+  basePrice: number, 
+  highOcc: number, 
+  lowOcc: number
+): Omit<PricingRecommendation, 'cruiseTypeId' | 'cruiseTypeName'> {
+  if (occupancy > highOcc) {
+    return {
+      recommendedPrice: Math.round(basePrice * 1.2),
+      reasoning: `High historical occupancy (${(occupancy * 100).toFixed(1)}%). Recommend +20% base price surge.`,
+      trend: 'surge'
+    };
+  } else if (occupancy > 0 && occupancy < lowOcc) {
+    return {
+      recommendedPrice: Math.round(basePrice * 0.85),
+      reasoning: `Low historical occupancy (${(occupancy * 100).toFixed(1)}%). Recommend 15% discount to drive volume.`,
+      trend: 'discount'
+    };
+  }
+
+  return {
+    recommendedPrice: basePrice,
+    reasoning: `Stable occupancy (${(occupancy * 100).toFixed(1)}%). Maintain base price.`,
+    trend: 'stable'
+  };
+}
+
 export function calculateHistoricalRecommendations(): PricingRecommendation[] {
   const db = getDb();
   
@@ -41,31 +68,12 @@ export function calculateHistoricalRecommendations(): PricingRecommendation[] {
 
   return results.map(row => {
     const occ = row.avg_occupancy || 0;
+    const recommendation = calculateRecommendation(occ, basePrice, highOcc, lowOcc);
     
-    if (occ > highOcc) {
-      return {
-        cruiseTypeId: row.cruiseTypeId,
-        cruiseTypeName: row.cruiseTypeName,
-        recommendedPrice: Math.round(basePrice * 1.2),
-        reasoning: `High historical occupancy (${(occ * 100).toFixed(1)}%). Recommend +20% base price surge.`,
-        trend: 'surge'
-      };
-    } else if (occ > 0 && occ < lowOcc) {
-      return {
-        cruiseTypeId: row.cruiseTypeId,
-        cruiseTypeName: row.cruiseTypeName,
-        recommendedPrice: Math.round(basePrice * 0.85),
-        reasoning: `Low historical occupancy (${(occ * 100).toFixed(1)}%). Recommend 15% discount to drive volume.`,
-        trend: 'discount'
-      };
-    }
-
     return {
       cruiseTypeId: row.cruiseTypeId,
       cruiseTypeName: row.cruiseTypeName,
-      recommendedPrice: basePrice,
-      reasoning: `Stable occupancy (${(occ * 100).toFixed(1)}%). Maintain base price.`,
-      trend: 'stable'
+      ...recommendation
     };
   });
 }
