@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { GET, POST } from "../../src/app/api/settings/route";
 
 vi.mock("../../src/server/domain/settings/configRepository", () => {
-  let mockStore: Record<string, string> = { test_key: "test_val" };
+  const mockStore: Record<string, string> = { test_key: "test_val" };
   return {
     getAllConfigs: vi.fn(() => mockStore),
     setConfig: vi.fn((k, v) => { mockStore[k] = v; }),

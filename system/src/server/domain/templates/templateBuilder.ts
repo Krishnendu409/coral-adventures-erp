@@ -216,7 +216,7 @@ export async function buildWorkbook(
   }
 
   for (const sheet of workbook.worksheets) {
-    // eslint-disable-next-line no-await-in-loop
+     
     await sheet.protect(SHEET_LOCK_PASSWORD, {
       selectLockedCells: true,
       selectUnlockedCells: true,

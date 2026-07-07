@@ -198,7 +198,7 @@ export async function validateTripFolderRich(folderPath: string, db: Database): 
   const parsed: Partial<Record<TemplateType, ParsedWorkbook>> = {};
   for (const [type, fileName] of presentByType) {
     const filePath = path.join(folderPath, fileName);
-    // eslint-disable-next-line no-await-in-loop
+     
     const result = await parseWorkbookFile(filePath, fileName, WORKBOOK_SPECS[type], db, issues);
     if (result) parsed[type] = result;
   }

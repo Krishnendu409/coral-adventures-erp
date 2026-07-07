@@ -49,7 +49,7 @@ class BetterSqlite3Polyfill {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
+   
   var __coralDb: BetterSqlite3Polyfill | undefined;
 }
 
