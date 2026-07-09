@@ -33,9 +33,6 @@ yarn-error.log*
 # env files — .env.example is safe to commit (no secrets), .env.local is NOT
 .env*
 !.env.example
-!system/.env.example
-.env.local
-system/.env.local
 
 # vercel
 .vercel
@@ -48,29 +45,20 @@ next-env.d.ts
 *.db
 *.sqlite
 *.sqlite3
-system/coral.db
 
 # Local operational data — keep folder structure, ignore runtime files
 /data/*
 !/data/.keep
-system/data/*
-!system/data/.keep
-!system/data/archive/.keep
-!system/data/backups/.keep
-!system/data/configuration/.keep
-!system/data/database/.keep
-!system/data/logs/.keep
-!system/data/templates/.keep
-system/src/server/db/data/*.db
+!/data/archive/.keep
+!/data/backups/.keep
+!/data/configuration/.keep
+!/data/database/.keep
+!/data/logs/.keep
+!/data/templates/.keep
+src/server/db/data/*.db
 
 # User-facing trip data folders — created at runtime, not source code
 /incoming/
 /exports/
 /reports/
 /generated/
-
-# Scratch / test files
-test-perf.ts
-test.pdf
-system/test-action.ts
-system/test-db.ts
