@@ -1,0 +1,313 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* =============================================================
+   Coral Adventures — Design Tokens
+   Source: docs/brand/logo-palette-extract.md (measured from the
+   real brand mark, not guessed). Neutral scale is a cool slate
+   ramp tuned to sit next to ocean-500 without fighting it.
+   Reference bar: Linear / Stripe / Vercel / Raycast / Notion.
+   ============================================================= */
+
+:root {
+  /* ---- Brand: ocean (primary) ---- */
+  --brand-ocean-50: #eef7fc;
+  --brand-ocean-100: #d7edf8;
+  --brand-ocean-200: #b0dbf1;
+  --brand-ocean-300: #7fc3e6;
+  --brand-ocean-400: #3ea6d6;
+  --brand-ocean-500: #1060a0; /* measured */
+  --brand-ocean-600: #0d4f85;
+  --brand-ocean-700: #0a3e69;
+  --brand-ocean-800: #072d4d;
+  --brand-ocean-900: #003040; /* measured (navy) */
+
+  /* ---- Brand: sunset gradient (wordmark) ---- */
+  --brand-gold-500: #ffc010; /* measured */
+  --brand-gold-600: #e0a300;
+  --brand-orange-500: #f05020; /* measured (parasail) */
+  --brand-orange-600: #b03818; /* measured (wordmark mid) */
+  --brand-maroon-700: #980818; /* measured (wordmark end) */
+
+  /* ---- Brand: accents ---- */
+  --brand-foam-100: #eef7dc; /* measured pale sky */
+  --brand-palm-500: #40b040; /* measured */
+
+  /* ---- Neutral scale (cool slate, pairs with ocean) ---- */
+  --neutral-0: #ffffff;
+  --neutral-25: #f9fbfc;
+  --neutral-50: #f3f6f8;
+  --neutral-100: #e9edf1;
+  --neutral-200: #d8dfe5;
+  --neutral-300: #bcc7cf;
+  --neutral-400: #8d99a3;
+  --neutral-500: #64717b;
+  --neutral-600: #4b5761;
+  --neutral-700: #37414a;
+  --neutral-800: #232a31;
+  --neutral-900: #14181d;
+  --neutral-950: #0a0d10;
+
+  /* ---- Semantic ---- */
+  --success-500: #1a9c6a;
+  --success-100: #d6f2e6;
+  --warning-500: #d68a10;
+  --warning-100: #fbedd0;
+  --danger-500: #c8342a;
+  --danger-100: #f8dcda;
+  --info-500: var(--brand-ocean-500);
+  --info-100: var(--brand-ocean-100);
+
+  /* ---- Surface / text (light theme) ---- */
+  --background: #ffffff;
+  --surface: rgba(255, 255, 255, 0.6);
+  --surface-raised: rgba(255, 255, 255, 0.8);
+  --surface-sunken: rgba(0, 0, 0, 0.03);
+  --border-subtle: var(--neutral-100);
+  --border-default: var(--neutral-200);
+  --foreground: var(--neutral-900);
+  --foreground-muted: var(--neutral-500);
+  --foreground-faint: var(--neutral-400);
+
+  --brand-primary: var(--brand-ocean-500);
+  --brand-primary-hover: var(--brand-ocean-600);
+  --brand-primary-foreground: var(--neutral-0);
+
+  /* ---- Radii / shadow / motion ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --shadow-xs: 0 1px 2px rgba(10, 20, 30, 0.04);
+  --shadow-sm: 0 1px 3px rgba(10, 20, 30, 0.06), 0 1px 2px rgba(10, 20, 30, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 20, 30, 0.08), 0 2px 4px rgba(10, 20, 30, 0.04);
+  --shadow-lg: 0 12px 32px rgba(10, 20, 30, 0.12), 0 4px 8px rgba(10, 20, 30, 0.04);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+
+  /* ---- Chart tokens (light) ----
+     Single-hue ocean ordinal ramp for ordered tiers (funnel stages,
+     Conservative->Best Case scenarios) — validated with the dataviz
+     skill's validate_palette.js --ordinal against this theme's light
+     surface (#ffffff): light-end contrast 2.75:1, monotone L, all
+     adjacent step gaps >= 0.06. */
+  --chart-ordinal-1: var(--brand-ocean-400);
+  --chart-ordinal-2: var(--brand-ocean-500);
+  --chart-ordinal-3: var(--brand-ocean-600);
+  --chart-ordinal-4: var(--brand-ocean-700);
+  --chart-ordinal-5: var(--brand-ocean-800);
+  --chart-sequential: var(--brand-ocean-500);
+  --chart-grid: var(--border-subtle);
+  --chart-axis: var(--foreground-faint);
+  --chart-tooltip-bg: var(--surface-raised);
+
+  /* ---- Shader Tokens (Light) ---- */
+  --shader-base: #f0f7fa;
+  --shader-grad-1: rgba(127, 195, 230, 0.4);
+  --shader-grad-2: rgba(255, 192, 16, 0.2);
+  --shader-grad-3: rgba(62, 166, 214, 0.3);
+  --shader-grad-4: rgba(240, 80, 32, 0.15);
+}
+
+:root[data-theme="dark"] {
+  --background: #09090b; /* Zinc 950 - Off-Black */
+  --surface: rgba(255, 255, 255, 0.03); /* subtle surface */
+  --surface-raised: rgba(255, 255, 255, 0.08);
+  --surface-sunken: #09090b;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-default: rgba(255, 255, 255, 0.15);
+  --foreground: rgba(255, 255, 255, 0.95);
+  --foreground-muted: rgba(255, 255, 255, 0.6);
+  --foreground-faint: rgba(255, 255, 255, 0.3);
+
+  --brand-primary: var(--brand-ocean-400);
+  --brand-primary-hover: var(--brand-ocean-300);
+  --brand-primary-foreground: var(--neutral-950);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55), 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  /* ---- Chart tokens (dark) ----
+     Same hue, restepped for the dark surface (#14181d): light-end
+     contrast 2.10:1, validated the same way as the light ramp above. */
+  --chart-ordinal-1: var(--brand-ocean-600);
+  --chart-ordinal-2: var(--brand-ocean-500);
+  --chart-ordinal-3: var(--brand-ocean-400);
+  --chart-ordinal-4: var(--brand-ocean-300);
+  --chart-ordinal-5: var(--brand-ocean-200);
+  --chart-sequential: var(--brand-ocean-400);
+
+  /* ---- Shader Tokens (Dark) ---- */
+  --shader-base: #040914;
+  --shader-grad-1: rgba(16, 96, 160, 0.15);
+  --shader-grad-2: rgba(10, 62, 105, 0.2);
+  --shader-grad-3: rgba(7, 45, 77, 0.25);
+  --shader-grad-4: rgba(13, 79, 133, 0.15);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-faint: var(--foreground-faint);
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-primary-foreground: var(--brand-primary-foreground);
+
+  --color-ocean-50: var(--brand-ocean-50);
+  --color-ocean-100: var(--brand-ocean-100);
+  --color-ocean-200: var(--brand-ocean-200);
+  --color-ocean-300: var(--brand-ocean-300);
+  --color-ocean-400: var(--brand-ocean-400);
+  --color-ocean-500: var(--brand-ocean-500);
+  --color-ocean-600: var(--brand-ocean-600);
+  --color-ocean-700: var(--brand-ocean-700);
+  --color-ocean-800: var(--brand-ocean-800);
+  --color-ocean-900: var(--brand-ocean-900);
+
+  --color-gold-500: var(--brand-gold-500);
+  --color-gold-600: var(--brand-gold-600);
+  --color-orange-500: var(--brand-orange-500);
+  --color-orange-600: var(--brand-orange-600);
+  --color-maroon-700: var(--brand-maroon-700);
+  --color-foam-100: var(--brand-foam-100);
+  --color-palm-500: var(--brand-palm-500);
+
+  --color-neutral-0: var(--neutral-0);
+  --color-neutral-25: var(--neutral-25);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+
+  --color-success: var(--success-500);
+  --color-success-subtle: var(--success-100);
+  --color-warning: var(--warning-500);
+  --color-warning-subtle: var(--warning-100);
+  --color-danger: var(--danger-500);
+  --color-danger-subtle: var(--danger-100);
+  --color-info: var(--info-500);
+  --color-info-subtle: var(--info-100);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border-default);
+}
+
+html {
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.011em;
+}
+
+::selection {
+  background: var(--color-ocean-200);
+  color: var(--color-ocean-900);
+}
+
+/* Scrollbar polish (webkit) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-700);
+  background-clip: content-box;
+}
+
+/* Reusable glassmorphism panel */
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface/50 backdrop-blur-xl border border-white/10 shadow-lg;
+  }
+}
+
+/* 
+ * Out-of-this-world Premium Shader Background
+ * Deep velvety navy blues with dynamic mesh gradients and a subtle noise overlay
+ */
+.shader-mesh-bg {
+  background-color: var(--shader-base);
+  background-image: 
+    radial-gradient(circle at 0% 0%, var(--shader-grad-1) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, var(--shader-grad-2) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, var(--shader-grad-3) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, var(--shader-grad-4) 0%, transparent 50%);
+  background-size: 100% 100%;
+  animation: pulseMesh 15s ease-in-out infinite alternate;
+  position: relative;
+}
+
+@keyframes pulseMesh {
+  0% {
+    background-size: 100% 100%;
+    background-position: 0% 0%;
+  }
+  50% {
+    background-size: 120% 120%;
+    background-position: 100% 100%;
+  }
+  100% {
+    background-size: 100% 100%;
+    background-position: 0% 0%;
+  }
+}
+
+.shader-mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
