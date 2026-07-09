@@ -21,7 +21,7 @@ Everything you interact with daily lives in the root folder:
 | `reports/` | PDF and CSV reports exported from the system land here. |
 | `exports/` | Other data exports appear here. |
 | `data/` | *(Internal)* SQLite database, logs, backups, and archive. Do not touch. |
-| `system/` | *(Internal)* The Next.js application source code. |
+| `src/` | The Next.js application source code. |
 
 ---
 
@@ -29,12 +29,10 @@ Everything you interact with daily lives in the root folder:
 
 ### Step 1 — Install
 
-Double-click **`install.bat`** and wait. It will:
-1. Install Node.js v22 (if not already installed or if outdated)
-2. Install all dependencies
-3. Create and migrate the database
-4. Set up your environment configuration
-5. Build the production application
+Run the following command in the root folder:
+```bash
+npm install
+```
 
 > ⏱️ First-time install takes ~3-5 minutes. After that it's instant.
 
@@ -51,12 +49,12 @@ The platform has an **AI Chief of Staff** chat assistant powered by Google Gemin
    - Copy the key (it looks like `AIzaSy...`)
 
 2. **Add the key to the system:**
-   - Open the file: `system/.env.local`
+   - Create a file named `.env` at the root of the project (copy from `.env.example` if available)
    - Find the line: `GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key_here`
    - Replace `your_gemini_api_key_here` with your actual key
    - Save the file
 
-3. **Restart the platform** (re-run `start.bat`)
+3. **Restart the platform** (re-run `npm run dev` or `npm start`)
 
 > 💡 The platform works completely without Gemini — only the AI chat widget will be unavailable.
 
@@ -64,7 +62,13 @@ The platform has an **AI Chief of Staff** chat assistant powered by Google Gemin
 
 ### Step 3 — Start
 
-Double-click **`start.bat`**. The dashboard opens at:
+Run the following command to start the application:
+
+```bash
+npm run dev
+```
+
+The dashboard opens at:
 
 ```
 http://localhost:3000
@@ -169,13 +173,13 @@ This script will:
 3. Trigger the import automatically
 4. Report the result
 
-> The dev server must be running (`start.bat` or `npm run dev`) for the import step to work.
+> The dev server must be running (`npm run dev`) for the import step to work.
 
 ---
 
 ## 🔧 Developer Commands
 
-Run from inside the `system/` folder:
+Run from the root folder:
 
 ```bash
 # Start development server (with hot reload)
@@ -204,7 +208,7 @@ npm test
 
 ## ⚙️ Configuration
 
-### Environment Variables (`system/.env.local`)
+### Environment Variables (`.env`)
 
 | Variable | Description | Required? |
 |----------|-------------|-----------|
@@ -228,9 +232,9 @@ Configure these from the web dashboard at `/settings/assumptions`:
 | Port 3000 in use | The app will automatically use port 3001. Check the terminal for the actual URL. |
 | "AI is unavailable" | Add your Gemini API key to `system/.env.local` and restart. |
 | Import fails | Check the import page for detailed error messages per file and sheet. |
-| Database error | Run `npm run db:migrate` from the `system/` folder to reset/update the schema. |
+| Database error | Run `npm run db:migrate` from the root folder to reset/update the schema. |
 | Charts show no data | Use the Import page to ingest trip data, or run `npm run db:seed` for reference data. |
-| Build fails | Delete `system/.next/` folder and run `npm run build` again. |
+| Build fails | Delete `.next/` folder and run `npm run build` again. |
 
 ---
 
@@ -239,7 +243,7 @@ Configure these from the web dashboard at `/settings/assumptions`:
 - All data stays **100% local** on your computer. Nothing is sent to any cloud except AI queries to Gemini.
 - Gemini only receives the text of your chat messages and query results (no passwords, keys, or personal data).
 - The AI is read-only — it cannot modify your database.
-- Keep `system/.env.local` private. It is excluded from git via `.gitignore`.
+- Keep `.env` private. It is excluded from git via `.gitignore`.
 
 ---
 
